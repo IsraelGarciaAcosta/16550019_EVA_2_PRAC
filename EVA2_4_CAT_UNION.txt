@@ -1,0 +1,960 @@
++------------------------+
+| alumnos                |
+| detalle                |
+| detalle_materias       |
+| hijo                   |
+| hijo_2                 |
+| horarios               |
+| maestro                |
+| materias               |
+| padre                  |
++------------------------+
+9 rows in set (0.00 sec)
+mysql-sql> create table A(id int, nombre varchar(50));
+Query OK, 0 rows affected (0.20 sec)
+mysql-sql> create table B(id int, nombre varchar(50));
+Query OK, 0 rows affected (0.08 sec)
+mysql-sql> inster into A(id,nombre) values (1,"A");
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the
+right syntax to use near 'inster into A(id,nombre) values (1,"A")' at line 1
+mysql-sql> insert into A (1,"A");
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the
+right syntax to use near '1,"A")' at line 1
+mysql-sql> insert into A values (1,"A");
+Query OK, 1 row affected (0.06 sec)
+mysql-sql> insert into A values (2,"B");
+Query OK, 1 row affected (0.08 sec)
+mysql-sql> insert into A values (3,"C");
+Query OK, 1 row affected (0.06 sec)
+mysql-sql> insert into A values (4,"D");
+Query OK, 1 row affected (0.19 sec)
+mysql-sql> insert into B values (1,"X");
+Query OK, 1 row affected (0.08 sec)
+mysql-sql> insert into B values (2,"Y");
+Query OK, 1 row affected (0.06 sec)
+mysql-sql> insert into B values (3,"Z");
+Query OK, 1 row affected (0.09 sec)
+mysql-sql> select * from A;
++----+--------+
+| id | nombre |
++----+--------+
+|  1 | A      |
+|  2 | B      |
+|  3 | C      |
+|  4 | D      |
++----+--------+
+4 rows in set (0.00 sec)
+mysql-sql> select * from B;
++----+--------+
+| id | nombre |
++----+--------+
+|  1 | X      |
+|  2 | Y      |
+|  3 | Z      |
++----+--------+
+3 rows in set (0.00 sec)
+mysql-sql> select * from A,B;
++----+--------+----+--------+
+| id | nombre | id | nombre |
++----+--------+----+--------+
+|  1 | A      |  1 | X      |
+|  1 | A      |  2 | Y      |
+|  1 | A      |  3 | Z      |
+|  2 | B      |  1 | X      |
+|  2 | B      |  2 | Y      |
+|  2 | B      |  3 | Z      |
+|  3 | C      |  1 | X      |
+|  3 | C      |  2 | Y      |
+|  3 | C      |  3 | Z      |
+|  4 | D      |  1 | X      |
+|  4 | D      |  2 | Y      |
+|  4 | D      |  3 | Z      |
++----+--------+----+--------+
+12 rows in set (0.00 sec)
+mysql-sql> select X.nombre, Y.nombre from A X, B Y;
++--------+--------+
+| nombre | nombre |
++--------+--------+
+| A      | X      |
+| A      | Y      |
+| A      | Z      |
+| B      | X      |
+| B      | Y      |
+| B      | Z      |
+| C      | X      |
+| C      | Y      |
+| C      | Z      |
+| D      | X      |
+| D      | Y      |
+| D      | Z      |
++--------+--------+
+12 rows in set (0.00 sec)
+mysql-sql> \use northwind
+Schema set to `northwind`.
+mysql-sql> show tables;
++----------------------+
+| Tables_in_northwind  |
++----------------------+
+| categories           |
+| customercustomerdemo |
+| customerdemographics |
+| customers            |
+| employees            |
+| employeeterritories  |
+| orderdetails         |
+| orders               |
+| products             |
+| region               |
+| shippers             |
+| suppliers            |
+| territories          |
++----------------------+
+13 rows in set (0.00 sec)
+mysql-sql> show tables;desc customers;
++----------------------+
+| Tables_in_northwind  |
++----------------------+
+| categories           |
+| customercustomerdemo |
+| customerdemographics |
+| customers            |
+| employees            |
+| employeeterritories  |
+| orderdetails         |
+| orders               |
+| products             |
+| region               |
+| shippers             |
+| suppliers            |
+| territories          |
++----------------------+
+13 rows in set (0.00 sec)
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| CustomerID   | varchar(5)  | NO   | PRI | null    |       |
+| CompanyName  | varchar(40) | NO   | MUL | null    |       |
+| ContactName  | varchar(30) | YES  |     | null    |       |
+| ContactTitle | varchar(30) | YES  |     | null    |       |
+| Address      | varchar(60) | YES  |     | null    |       |
+| City         | varchar(15) | YES  | MUL | null    |       |
+| Region       | varchar(15) | YES  | MUL | null    |       |
+| PostalCode   | varchar(10) | YES  | MUL | null    |       |
+| Country      | varchar(15) | YES  |     | null    |       |
+| Phone        | varchar(24) | YES  |     | null    |       |
+| Fax          | varchar(24) | YES  |     | null    |       |
++--------------+-------------+------+-----+---------+-------+
+11 rows in set (0.07 sec)
+mysql-sql> select count(*) from customers;
++----------+
+| count(*) |
++----------+
+|       93 |
++----------+
+1 row in set (0.00 sec)
+mysql-sql> desc employees;
++-----------------+--------------+------+-----+---------+----------------+
+| Field           | Type         | Null | Key | Default | Extra          |
++-----------------+--------------+------+-----+---------+----------------+
+| EmployeeID      | int(11)      | NO   | PRI | null    | auto_increment |
+| LastName        | varchar(20)  | NO   | MUL | null    |                |
+| FirstName       | varchar(10)  | NO   |     | null    |                |
+| Title           | varchar(30)  | YES  |     | null    |                |
+| TitleOfCourtesy | varchar(25)  | YES  |     | null    |                |
+| BirthDate       | datetime     | YES  |     | null    |                |
+| HireDate        | datetime     | YES  |     | null    |                |
+| Address         | varchar(60)  | YES  |     | null    |                |
+| City            | varchar(15)  | YES  |     | null    |                |
+| Region          | varchar(15)  | YES  |     | null    |                |
+| PostalCode      | varchar(10)  | YES  | MUL | null    |                |
+| Country         | varchar(15)  | YES  |     | null    |                |
+| HomePhone       | varchar(24)  | YES  |     | null    |                |
+| Extension       | varchar(4)   | YES  |     | null    |                |
+| Notes           | mediumtext   | NO   |     | null    |                |
+| ReportsTo       | int(11)      | YES  | MUL | null    |                |
+| PhotoPath       | varchar(255) | YES  |     | null    |                |
+| Salary          | float        | YES  |     | null    |                |
++-----------------+--------------+------+-----+---------+----------------+
+18 rows in set (0.06 sec)
+mysql-sql> select count(*) from employees;
++----------+
+| count(*) |
++----------+
+|        9 |
++----------+
+1 row in set (0.00 sec)
+mysql-sql> select * from customers, employees limit 10;
++------------+------------------------------------+--------------+----------------------+------------------------------+----------
+--+--------+------------+---------+--------------+--------------+------------+-----------+-----------+--------------------------+-
+----------------+--------------------+--------------------+--------------------------------+----------+--------+------------+-----
+----+----------------+-----------+------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------+-----------+-----------------------
+-----------------+---------+
+| CustomerID | CompanyName                        | ContactName  | ContactTitle         | Address                      | City
+  | Region | PostalCode | Country | Phone        | Fax          | EmployeeID | LastName  | FirstName | Title                    |
+TitleOfCourtesy | BirthDate          | HireDate           | Address                        | City     | Region | PostalCode | Coun
+try | HomePhone      | Extension | Notes
+
+
+                                                                                              | ReportsTo | PhotoPath
+                 | Salary  |
++------------+------------------------------------+--------------+----------------------+------------------------------+----------
+--+--------+------------+---------+--------------+--------------+------------+-----------+-----------+--------------------------+-
+----------------+--------------------+--------------------+--------------------------------+----------+--------+------------+-----
+----+----------------+-----------+------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------+-----------+-----------------------
+-----------------+---------+
+| ALFKI      | Alfreds Futterkiste                | Maria Anders | Sales Representative | Obere Str. 57                | Berlin
+  | null   | 12209      | Germany | 030-0074321  | 030-0076545  |          1 | Davolio   | Nancy     | Sales Representative     |
+Ms.             | 1948-12-00 8:00:00 | 1992-05-01 0:00:00 | 507 - 20th Ave. E.Apt. 2A      | Seattle  | WA     | 98122      | USA
+    | (206) 555-9857 | 5467      | Education includes a BA in psychology from Colorado State University in 1970.  She also complet
+ed "The Art of the Cold Call."  Nancy is a member of Toastmasters International.
+
+                                                                                              |         2 | http://accweb/emmploye
+es/davolio.bmp   | 2954.55 |
+| ALFKI      | Alfreds Futterkiste                | Maria Anders | Sales Representative | Obere Str. 57                | Berlin
+  | null   | 12209      | Germany | 030-0074321  | 030-0076545  |          2 | Fuller    | Andrew    | Vice President, Sales    |
+Dr.             | 1952-02-19 0:00:00 | 1992-00-00 0:00:00 | 908 W. Capital Way             | Tacoma   | WA     | 98401      | USA
+    | (206) 555-9482 | 3457      | Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the Univ
+ersity of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative,
+was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Manag
+ement Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association. |      null | http://accweb/emmploye
+es/fuller.bmp    | 2254.49 |
+| ALFKI      | Alfreds Futterkiste                | Maria Anders | Sales Representative | Obere Str. 57                | Berlin
+  | null   | 12209      | Germany | 030-0074321  | 030-0076545  |          3 | Leverling | Janet     | Sales Representative     |
+Ms.             | 1963-00-00 0:00:00 | 1992-04-01 0:00:00 | 722 Moss Bay Blvd.             | Kirkland | WA     | 98033      | USA
+    | (206) 555-3412 | 3355      | Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certif
+icate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in
+February 1992.
+                                                                                              |         2 | http://accweb/emmploye
+es/leverling.bmp | 3119.15 |
+| ALFKI      | Alfreds Futterkiste                | Maria Anders | Sales Representative | Obere Str. 57                | Berlin
+  | null   | 12209      | Germany | 030-0074321  | 030-0076545  |          4 | Peacock   | Margaret  | Sales Representative     |
+Mrs.            | 1937-00-00 0:00:00 | 1993-05-03 0:00:00 | 4110 Old Redmond Rd.           | Redmond  | WA     | 98052      | USA
+    | (206) 555-8122 | 5176      | Margaret holds a BA in English literature from Concordia College (1958) and an MA from the Amer
+ican Institute of Culinary Arts (1966).  She was assigned to the London office temporarily from July through November 1992.
+
+                                                                                              |         2 | http://accweb/emmploye
+es/peacock.bmp   | 1861.08 |
+| ALFKI      | Alfreds Futterkiste                | Maria Anders | Sales Representative | Obere Str. 57                | Berlin
+  | null   | 12209      | Germany | 030-0074321  | 030-0076545  |          5 | Buchanan  | Steven    | Sales Manager            |
+Mr.             | 1955-03-04 0:00:00 | 1993-10-17 0:00:00 | 14 Garrett Hill                | London   | null   | SW1 8JR    | UK
+    | (71) 555-4848  | 3453      | Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976.  Up
+on joining the company as a sales representative in 1992, he spent 6 months in an orientation program at the Seattle office and th
+en returned to his permanent post in London.  He was promoted to sales manager in March 1993.  Mr. Buchanan has completed the cour
+ses "Successful Telemarketing" and "International Sales Management."  He is fluent in French. |         2 | http://accweb/emmploye
+es/buchanan.bmp  | 1744.21 |
+| ALFKI      | Alfreds Futterkiste                | Maria Anders | Sales Representative | Obere Str. 57                | Berlin
+  | null   | 12209      | Germany | 030-0074321  | 030-0076545  |          6 | Suyama    | Michael   | Sales Representative     |
+Mr.             | 1963-07-02 0:00:00 | 1993-10-17 0:00:00 | Coventry House
+Miner Rd.      | London   | null   | EC2 7JR    | UK      | (71) 555-7773  | 428       | Michael is a graduate of Sussex Universit
+y (MA, economics, 1983) and the University of California at Los Angeles (MBA, marketing, 1986).  He has also taken the courses "Mu
+lti-Cultural Selling" and "Time Management for the Sales Professional."  He is fluent in Japanese and can read and write French, P
+ortuguese, and Spanish.
+                  |         5 | http://accweb/emmployees/davolio.bmp   | 2004.07 |
+| ALFKI      | Alfreds Futterkiste                | Maria Anders | Sales Representative | Obere Str. 57                | Berlin
+  | null   | 12209      | Germany | 030-0074321  | 030-0076545  |          7 | King      | Robert    | Sales Representative     |
+Mr.             | 1960-05-29 0:00:00 | 1994-01-02 0:00:00 | Edgeham Hollow
+Winchester Way | London   | null   | RG1 9SP    | UK      | (71) 555-5598  | 465       | Robert King served in the Peace Corps and
+ traveled extensively before completing his degree in English at the University of Michigan in 1992, the year he joined the compan
+y.  After completing a course entitled "Selling in Europe," he was transferred to the London office in March 1993.
+
+                  |         5 | http://accweb/emmployees/davolio.bmp   | 1991.55 |
+| ALFKI      | Alfreds Futterkiste                | Maria Anders | Sales Representative | Obere Str. 57                | Berlin
+  | null   | 12209      | Germany | 030-0074321  | 030-0076545  |          8 | Callahan  | Laura     | Inside Sales Coordinator |
+Ms.             | 1958-01-00 9:00:00 | 1994-03-05 0:00:00 | 4726 - 11th Ave. N.E.          | Seattle  | WA     | 98105      | USA
+    | (206) 555-1189 | 2344      | Laura received a BA in psychology from the University of Washington.  She has also completed a
+course in business French.  She reads and writes French.
+
+                                                                                              |         2 | http://accweb/emmploye
+es/davolio.bmp   |  2100.5 |
+| ALFKI      | Alfreds Futterkiste                | Maria Anders | Sales Representative | Obere Str. 57                | Berlin
+  | null   | 12209      | Germany | 030-0074321  | 030-0076545  |          9 | Dodsworth | Anne      | Sales Representative     |
+Ms.             | 1966-01-27 0:00:00 | 1994-11-15 0:00:00 | 7 Houndstooth Rd.              | London   | null   | WG2 7LT    | UK
+    | (71) 555-4444  | 452       | Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.
+
+
+                                                                                              |         5 | http://accweb/emmploye
+es/davolio.bmp   | 2333.33 |
+| ANATR      | Ana Trujillo Emparedados y helados | Ana Trujillo | Owner                | Avda. de la Constitucin 2222 | Mxico D.F
+. | null   | 05021      | Mexico  | (5) 555-4729 | (5) 555-3745 |          1 | Davolio   | Nancy     | Sales Representative     |
+Ms.             | 1948-12-00 8:00:00 | 1992-05-01 0:00:00 | 507 - 20th Ave. E.Apt. 2A      | Seattle  | WA     | 98122      | USA
+    | (206) 555-9857 | 5467      | Education includes a BA in psychology from Colorado State University in 1970.  She also complet
+ed "The Art of the Cold Call."  Nancy is a member of Toastmasters International.
+
+                                                                                              |         2 | http://accweb/emmploye
+es/davolio.bmp   | 2954.55 |
++------------+------------------------------------+--------------+----------------------+------------------------------+----------
+--+--------+------------+---------+--------------+--------------+------------+-----------+-----------+--------------------------+-
+----------------+--------------------+--------------------+--------------------------------+----------+--------+------------+-----
+----+----------------+-----------+------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------+-----------+-----------------------
+-----------------+---------+
+10 rows in set (0.00 sec)
+mysql-sql>
+mysql-sql> select A.contactname, A.city, B.firstname, B.city from customers A, employees B limit 15;
++--------------+------------+-----------+----------+
+| contactname  | city       | firstname | city     |
++--------------+------------+-----------+----------+
+| Maria Anders | Berlin     | Nancy     | Seattle  |
+| Maria Anders | Berlin     | Andrew    | Tacoma   |
+| Maria Anders | Berlin     | Janet     | Kirkland |
+| Maria Anders | Berlin     | Margaret  | Redmond  |
+| Maria Anders | Berlin     | Steven    | London   |
+| Maria Anders | Berlin     | Michael   | London   |
+| Maria Anders | Berlin     | Robert    | London   |
+| Maria Anders | Berlin     | Laura     | Seattle  |
+| Maria Anders | Berlin     | Anne      | London   |
+| Ana Trujillo | Mxico D.F. | Nancy     | Seattle  |
+| Ana Trujillo | Mxico D.F. | Andrew    | Tacoma   |
+| Ana Trujillo | Mxico D.F. | Janet     | Kirkland |
+| Ana Trujillo | Mxico D.F. | Margaret  | Redmond  |
+| Ana Trujillo | Mxico D.F. | Steven    | London   |
+| Ana Trujillo | Mxico D.F. | Michael   | London   |
++--------------+------------+-----------+----------+
+15 rows in set (0.00 sec)
+mysql-sql> select A.contactname, A.city, B.firstname, B.city from customers A, employees B
+       ... where A.city = B.city;
++-------------------+----------+-----------+----------+
+| contactname       | city     | firstname | city     |
++-------------------+----------+-----------+----------+
+| Karl Jablonski    | Seattle  | Nancy     | Seattle  |
+| Helvetius Nagy    | Kirkland | Janet     | Kirkland |
+| Thomas Hardy      | London   | Steven    | London   |
+| Victoria Ashworth | London   | Steven    | London   |
+| Elizabeth Brown   | London   | Steven    | London   |
+| Ann Devon         | London   | Steven    | London   |
+| Simon Crowther    | London   | Steven    | London   |
+| Hari Kumar        | London   | Steven    | London   |
+| Thomas Hardy      | London   | Michael   | London   |
+| Victoria Ashworth | London   | Michael   | London   |
+| Elizabeth Brown   | London   | Michael   | London   |
+| Ann Devon         | London   | Michael   | London   |
+| Simon Crowther    | London   | Michael   | London   |
+| Hari Kumar        | London   | Michael   | London   |
+| Thomas Hardy      | London   | Robert    | London   |
+| Victoria Ashworth | London   | Robert    | London   |
+| Elizabeth Brown   | London   | Robert    | London   |
+| Ann Devon         | London   | Robert    | London   |
+| Simon Crowther    | London   | Robert    | London   |
+| Hari Kumar        | London   | Robert    | London   |
+| Karl Jablonski    | Seattle  | Laura     | Seattle  |
+| Thomas Hardy      | London   | Anne      | London   |
+| Victoria Ashworth | London   | Anne      | London   |
+| Elizabeth Brown   | London   | Anne      | London   |
+| Ann Devon         | London   | Anne      | London   |
+| Simon Crowther    | London   | Anne      | London   |
+| Hari Kumar        | London   | Anne      | London   |
++-------------------+----------+-----------+----------+
+27 rows in set (0.00 sec)
+mysql-sql>
+mysql-sql> select A.contactname, A.city, B.firstname, B.city from customers A, employees B
+       ... where A.city = B.city
+       ... order by A.city, A.contactname, B.firstname;
++-------------------+----------+-----------+----------+
+| contactname       | city     | firstname | city     |
++-------------------+----------+-----------+----------+
+| Helvetius Nagy    | Kirkland | Janet     | Kirkland |
+| Ann Devon         | London   | Anne      | London   |
+| Ann Devon         | London   | Michael   | London   |
+| Ann Devon         | London   | Robert    | London   |
+| Ann Devon         | London   | Steven    | London   |
+| Elizabeth Brown   | London   | Anne      | London   |
+| Elizabeth Brown   | London   | Michael   | London   |
+| Elizabeth Brown   | London   | Robert    | London   |
+| Elizabeth Brown   | London   | Steven    | London   |
+| Hari Kumar        | London   | Anne      | London   |
+| Hari Kumar        | London   | Michael   | London   |
+| Hari Kumar        | London   | Robert    | London   |
+| Hari Kumar        | London   | Steven    | London   |
+| Simon Crowther    | London   | Anne      | London   |
+| Simon Crowther    | London   | Michael   | London   |
+| Simon Crowther    | London   | Robert    | London   |
+| Simon Crowther    | London   | Steven    | London   |
+| Thomas Hardy      | London   | Anne      | London   |
+| Thomas Hardy      | London   | Michael   | London   |
+| Thomas Hardy      | London   | Robert    | London   |
+| Thomas Hardy      | London   | Steven    | London   |
+| Victoria Ashworth | London   | Anne      | London   |
+| Victoria Ashworth | London   | Michael   | London   |
+| Victoria Ashworth | London   | Robert    | London   |
+| Victoria Ashworth | London   | Steven    | London   |
+| Karl Jablonski    | Seattle  | Laura     | Seattle  |
+| Karl Jablonski    | Seattle  | Nancy     | Seattle  |
++-------------------+----------+-----------+----------+
+27 rows in set (0.00 sec)
+mysql-sql>
+mysql-sql> \use evaluacion_2
+Schema set to `evaluacion_2`.
+mysql-sql> show tables;
++------------------------+
+| Tables_in_evaluacion_2 |
++------------------------+
+| a                      |
+| alumnos                |
+| b                      |
+| detalle                |
+| detalle_materias       |
+| hijo                   |
+| hijo_2                 |
+| horarios               |
+| maestro                |
+| materias               |
+| padre                  |
++------------------------+
+11 rows in set (0.00 sec)
+mysql-sql> select * from A;
++----+--------+
+| id | nombre |
++----+--------+
+|  1 | A      |
+|  2 | B      |
+|  3 | C      |
+|  4 | D      |
++----+--------+
+4 rows in set (0.00 sec)
+mysql-sql> select * from B;
++----+--------+
+| id | nombre |
++----+--------+
+|  1 | X      |
+|  2 | Y      |
+|  3 | Z      |
++----+--------+
+3 rows in set (0.00 sec)
+mysql-sql> select * from A union select * from B;
++----+--------+
+| id | nombre |
++----+--------+
+|  1 | A      |
+|  2 | B      |
+|  3 | C      |
+|  4 | D      |
+|  1 | X      |
+|  2 | Y      |
+|  3 | Z      |
++----+--------+
+7 rows in set (0.00 sec)
+mysql-sql> insert into A values(5,"A");
+Query OK, 1 row affected (0.16 sec)
+mysql-sql> select * from A;
++----+--------+
+| id | nombre |
++----+--------+
+|  1 | A      |
+|  2 | B      |
+|  3 | C      |
+|  4 | D      |
+|  5 | A      |
++----+--------+
+5 rows in set (0.00 sec)
+mysql-sql> select * from A union select * from B;
++----+--------+
+| id | nombre |
++----+--------+
+|  1 | A      |
+|  2 | B      |
+|  3 | C      |
+|  4 | D      |
+|  5 | A      |
+|  1 | X      |
+|  2 | Y      |
+|  3 | Z      |
++----+--------+
+8 rows in set (0.00 sec)
+mysql-sql> select nombre from A union select nombre from B;
++--------+
+| nombre |
++--------+
+| A      |
+| B      |
+| C      |
+| D      |
+| X      |
+| Y      |
+| Z      |
++--------+
+7 rows in set (0.00 sec)
+mysql-sql> select nombre from A union all select nombre from B;
++--------+
+| nombre |
++--------+
+| A      |
+| B      |
+| C      |
+| D      |
+| A      |
+| X      |
+| Y      |
+| Z      |
++--------+
+8 rows in set (0.00 sec)
+mysql-sql>
+mysql-sql> \use northwind
+Schema set to `northwind`.
+mysql-sql> show tables;
++----------------------+
+| Tables_in_northwind  |
++----------------------+
+| categories           |
+| customercustomerdemo |
+| customerdemographics |
+| customers            |
+| employees            |
+| employeeterritories  |
+| orderdetails         |
+| orders               |
+| products             |
+| region               |
+| shippers             |
+| suppliers            |
+| territories          |
++----------------------+
+13 rows in set (0.00 sec)
+mysql-sql> select city from customers;
++-----------------+
+| city            |
++-----------------+
+| null            |
+| null            |
+| Aachen          |
+| Albuquerque     |
+| Anchorage       |
+| Barcelona       |
+| Barquisimeto    |
+| Bergamo         |
+| Berlin          |
+| Bern            |
+| Boise           |
+| Brandenburg     |
+| Brcke           |
+| Bruxelles       |
+| Buenos Aires    |
+| Buenos Aires    |
+| Buenos Aires    |
+| Butte           |
+| Campinas        |
+| Caracas         |
+| Charleroi       |
+| Cork            |
+| Cowes           |
+| Cunewalde       |
+| Elgin           |
+| Eugene          |
+| Frankfurt a.M.  |
+| Genve           |
+| Graz            |
+| Helsinki        |
+| I. de Margarita |
+| Kirkland        |
+| Kln             |
+| Kobenhavn       |
+| Lander          |
+| Leipzig         |
+| Lille           |
+| Lisboa          |
+| Lisboa          |
+| London          |
+| London          |
+| London          |
+| London          |
+| London          |
+| London          |
+| Lule            |
+| Lyon            |
+| Madrid          |
+| Madrid          |
+| Madrid          |
+| Mannheim        |
+| Marseille       |
+| Mnchen          |
+| Mnster          |
+| Montral         |
+| Mxico D.F.      |
+| Mxico D.F.      |
+| Mxico D.F.      |
+| Mxico D.F.      |
+| Mxico D.F.      |
+| Nantes          |
+| Nantes          |
+| Oulu            |
+| Paris           |
+| Paris           |
+| Portland        |
+| Portland        |
+| Reggio Emilia   |
+| Reims           |
+| Resende         |
+| rhus            |
+| Rio de Janeiro  |
+| Rio de Janeiro  |
+| Rio de Janeiro  |
+| Salzburg        |
+| San Cristbal    |
+| San Francisco   |
+| Sao Paulo       |
+| Sao Paulo       |
+| Sao Paulo       |
+| Sao Paulo       |
+| Seattle         |
+| Sevilla         |
+| Stavern         |
+| Strasbourg      |
+| Stuttgart       |
+| Torino          |
+| Toulouse        |
+| Tsawassen       |
+| Vancouver       |
+| Versailles      |
+| Walla Walla     |
+| Warszawa        |
++-----------------+
+93 rows in set (0.00 sec)
+mysql-sql> select distint city from customers;
+ERROR: 1054 (42S22): Unknown column 'distint' in 'field list'
+mysql-sql> select distinct city from customers;
++-----------------+
+| city            |
++-----------------+
+| null            |
+| Aachen          |
+| Albuquerque     |
+| Anchorage       |
+| Barcelona       |
+| Barquisimeto    |
+| Bergamo         |
+| Berlin          |
+| Bern            |
+| Boise           |
+| Brandenburg     |
+| Brcke           |
+| Bruxelles       |
+| Buenos Aires    |
+| Butte           |
+| Campinas        |
+| Caracas         |
+| Charleroi       |
+| Cork            |
+| Cowes           |
+| Cunewalde       |
+| Elgin           |
+| Eugene          |
+| Frankfurt a.M.  |
+| Genve           |
+| Graz            |
+| Helsinki        |
+| I. de Margarita |
+| Kirkland        |
+| Kln             |
+| Kobenhavn       |
+| Lander          |
+| Leipzig         |
+| Lille           |
+| Lisboa          |
+| London          |
+| Lule            |
+| Lyon            |
+| Madrid          |
+| Mannheim        |
+| Marseille       |
+| Mnchen          |
+| Mnster          |
+| Montral         |
+| Mxico D.F.      |
+| Nantes          |
+| Oulu            |
+| Paris           |
+| Portland        |
+| Reggio Emilia   |
+| Reims           |
+| Resende         |
+| rhus            |
+| Rio de Janeiro  |
+| Salzburg        |
+| San Cristbal    |
+| San Francisco   |
+| Sao Paulo       |
+| Seattle         |
+| Sevilla         |
+| Stavern         |
+| Strasbourg      |
+| Stuttgart       |
+| Torino          |
+| Toulouse        |
+| Tsawassen       |
+| Vancouver       |
+| Versailles      |
+| Walla Walla     |
+| Warszawa        |
++-----------------+
+70 rows in set (0.00 sec)
+mysql-sql>
+mysql-sql> select distinct city from employees;
++----------+
+| city     |
++----------+
+| Seattle  |
+| Tacoma   |
+| Kirkland |
+| Redmond  |
+| London   |
++----------+
+5 rows in set (0.00 sec)
+mysql-sql> select city from customers union select city from employees;
++-----------------+
+| city            |
++-----------------+
+| null            |
+| Aachen          |
+| Albuquerque     |
+| Anchorage       |
+| Barcelona       |
+| Barquisimeto    |
+| Bergamo         |
+| Berlin          |
+| Bern            |
+| Boise           |
+| Brandenburg     |
+| Brcke           |
+| Bruxelles       |
+| Buenos Aires    |
+| Butte           |
+| Campinas        |
+| Caracas         |
+| Charleroi       |
+| Cork            |
+| Cowes           |
+| Cunewalde       |
+| Elgin           |
+| Eugene          |
+| Frankfurt a.M.  |
+| Genve           |
+| Graz            |
+| Helsinki        |
+| I. de Margarita |
+| Kirkland        |
+| Kln             |
+| Kobenhavn       |
+| Lander          |
+| Leipzig         |
+| Lille           |
+| Lisboa          |
+| London          |
+| Lule            |
+| Lyon            |
+| Madrid          |
+| Mannheim        |
+| Marseille       |
+| Mnchen          |
+| Mnster          |
+| Montral         |
+| Mxico D.F.      |
+| Nantes          |
+| Oulu            |
+| Paris           |
+| Portland        |
+| Reggio Emilia   |
+| Reims           |
+| Resende         |
+| rhus            |
+| Rio de Janeiro  |
+| Salzburg        |
+| San Cristbal    |
+| San Francisco   |
+| Sao Paulo       |
+| Seattle         |
+| Sevilla         |
+| Stavern         |
+| Strasbourg      |
+| Stuttgart       |
+| Torino          |
+| Toulouse        |
+| Tsawassen       |
+| Vancouver       |
+| Versailles      |
+| Walla Walla     |
+| Warszawa        |
+| Tacoma          |
+| Redmond         |
++-----------------+
+72 rows in set (0.00 sec)
+mysql-sql>
+mysql-sql> (select city from customers) union (select city from employees) order by city;
++-----------------+
+| city            |
++-----------------+
+| null            |
+| Aachen          |
+| Albuquerque     |
+| Anchorage       |
+| Barcelona       |
+| Barquisimeto    |
+| Bergamo         |
+| Berlin          |
+| Bern            |
+| Boise           |
+| Brandenburg     |
+| Brcke           |
+| Bruxelles       |
+| Buenos Aires    |
+| Butte           |
+| Campinas        |
+| Caracas         |
+| Charleroi       |
+| Cork            |
+| Cowes           |
+| Cunewalde       |
+| Elgin           |
+| Eugene          |
+| Frankfurt a.M.  |
+| Genve           |
+| Graz            |
+| Helsinki        |
+| I. de Margarita |
+| Kirkland        |
+| Kln             |
+| Kobenhavn       |
+| Lander          |
+| Leipzig         |
+| Lille           |
+| Lisboa          |
+| London          |
+| Lule            |
+| Lyon            |
+| Madrid          |
+| Mannheim        |
+| Marseille       |
+| Mnchen          |
+| Mnster          |
+| Montral         |
+| Mxico D.F.      |
+| Nantes          |
+| Oulu            |
+| Paris           |
+| Portland        |
+| Redmond         |
+| Reggio Emilia   |
+| Reims           |
+| Resende         |
+| rhus            |
+| Rio de Janeiro  |
+| Salzburg        |
+| San Cristbal    |
+| San Francisco   |
+| Sao Paulo       |
+| Seattle         |
+| Sevilla         |
+| Stavern         |
+| Strasbourg      |
+| Stuttgart       |
+| Tacoma          |
+| Torino          |
+| Toulouse        |
+| Tsawassen       |
+| Vancouver       |
+| Versailles      |
+| Walla Walla     |
+| Warszawa        |
++-----------------+
+72 rows in set (0.00 sec)
+mysql-sql>
+mysql-sql> (select city from customers order by city) union (select city from employees order by city);
++-----------------+
+| city            |
++-----------------+
+| null            |
+| Aachen          |
+| Albuquerque     |
+| Anchorage       |
+| Barcelona       |
+| Barquisimeto    |
+| Bergamo         |
+| Berlin          |
+| Bern            |
+| Boise           |
+| Brandenburg     |
+| Brcke           |
+| Bruxelles       |
+| Buenos Aires    |
+| Butte           |
+| Campinas        |
+| Caracas         |
+| Charleroi       |
+| Cork            |
+| Cowes           |
+| Cunewalde       |
+| Elgin           |
+| Eugene          |
+| Frankfurt a.M.  |
+| Genve           |
+| Graz            |
+| Helsinki        |
+| I. de Margarita |
+| Kirkland        |
+| Kln             |
+| Kobenhavn       |
+| Lander          |
+| Leipzig         |
+| Lille           |
+| Lisboa          |
+| London          |
+| Lule            |
+| Lyon            |
+| Madrid          |
+| Mannheim        |
+| Marseille       |
+| Mnchen          |
+| Mnster          |
+| Montral         |
+| Mxico D.F.      |
+| Nantes          |
+| Oulu            |
+| Paris           |
+| Portland        |
+| Reggio Emilia   |
+| Reims           |
+| Resende         |
+| rhus            |
+| Rio de Janeiro  |
+| Salzburg        |
+| San Cristbal    |
+| San Francisco   |
+| Sao Paulo       |
+| Seattle         |
+| Sevilla         |
+| Stavern         |
+| Strasbourg      |
+| Stuttgart       |
+| Torino          |
+| Toulouse        |
+| Tsawassen       |
+| Vancouver       |
+| Versailles      |
+| Walla Walla     |
+| Warszawa        |
+| Tacoma          |
+| Redmond         |
++-----------------+
+72 rows in set (0.00 sec)
+mysql-sql> (select city from customers limit 5) union (select city from employees);
++-------------+
+| city        |
++-------------+
+| null        |
+| Aachen      |
+| Albuquerque |
+| Anchorage   |
+| Seattle     |
+| Tacoma      |
+| Kirkland    |
+| Redmond     |
+| London      |
++-------------+
+9 rows in set (0.00 sec)
+mysql-sql>

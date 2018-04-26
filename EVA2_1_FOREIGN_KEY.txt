@@ -1,0 +1,250 @@
+MySQL Shell 1.0.11
+
+Copyright (c) 2016, 2017, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+
+Currently in JavaScript mode. Use \sql to switch to SQL mode and execute queries.
+mysql-js> \sql
+Switching to SQL mode... Commands end with ;
+mysql-sql> \connect -c root@localhost
+Creating a Classic Session to 'root@localhost'
+Enter password:
+Your MySQL connection id is 1
+Server version: 5.5.8-log MySQL Community Server (GPL)
+No default schema selected; type \use <schema> to set one.
+mysql-sql> create database evaluacion_2;
+Query OK, 1 row affected (0.03 sec)
+mysql-sql> show databases;
++-----------------------+
+| Database              |
++-----------------------+
+| information_schema    |
+| banco2                |
+| datos_personal        |
+| datoscoches           |
+| ejercicios            |
+| evaluacion_2          |
+| examen_unidad_lll     |
+| inventario            |
+| mundo                 |
+| mysql                 |
+| nose                  |
+| performance_schema    |
+| personal              |
+| practica2             |
+| practica2azteca       |
+| practica_12_topavprog |
+| test                  |
++-----------------------+
+17 rows in set (0.48 sec)
+mysql-sql> \use evaluacion_2
+Schema set to `evaluacion_2`.
+mysql-sql> show tables;
+Empty set (0.00 sec)
+mysql-sql> create table padre(
+       ... id int not null key auto_increment,
+       ... campo varchar(50));
+Query OK, 0 rows affected (0.22 sec)
+mysql-sql> create table hijo(
+       ... id int not null key auto_increment,
+       ... padre_id int);
+Query OK, 0 rows affected (0.49 sec)
+mysql-sql> show tables;
++------------------------+
+| Tables_in_evaluacion_2 |
++------------------------+
+| hijo                   |
+| padre                  |
++------------------------+
+2 rows in set (0.00 sec)
+mysql-sql> insert into padre(campo) values ("Israel Garcia");
+Query OK, 1 row affected (0.08 sec)
+mysql-sql> select * from padre;
++----+---------------+
+| id | campo         |
++----+---------------+
+|  1 | Israel Garcia |
++----+---------------+
+1 row in set (0.00 sec)
+mysql-sql> insert into hijo (padre_id) values (1);
+Query OK, 1 row affected (0.08 sec)
+mysql-sql> select * from hijo;
++----+----------+
+| id | padre_id |
++----+----------+
+|  1 |        1 |
++----+----------+
+1 row in set (0.00 sec)
+mysql-sql> delete from padre where id = 1;
+Query OK, 1 row affected (0.16 sec)
+mysql-sql> select * from padre;
+Empty set (0.00 sec)
+mysql-sql> select * from hijo;
++----+----------+
+| id | padre_id |
++----+----------+
+|  1 |        1 |
++----+----------+
+1 row in set (0.00 sec)
+mysql-sql> drop table hijo;
+Query OK, 0 rows affected (0.08 sec)
+mysql-sql> create table hijo(
+       ... id int not null key auto_increment,
+       ... padre_id int not null,
+       ... foreign key (padre_id) reference padre(id) on update on cascade on delete cascade);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your
+ MySQL server version for the right syntax to use near 'reference padre(id) on update on cascade on
+delete cascade)' at line 4
+mysql-sql> create table hijo(
+       ... id int not null key auto_increment,
+       ... padre_id int not null,
+       ... foreign key (padre_id) references padre(id) on update on cascade on delete cascade);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your
+ MySQL server version for the right syntax to use near 'on cascade on delete cascade)' at line 4
+mysql-sql> create table hijo(
+       ... id int not null key auto_increment,
+       ... padre_id int not null,
+       ... foreign key (padre_id) references padre(id) on update on cascade on delete cascade);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your
+ MySQL server version for the right syntax to use near 'on cascade on delete cascade)' at line 4
+mysql-sql> create table hijo(
+       ... id int not null key auto_increment,
+       ... padre_id int not null,
+       ... foreign key (padre_id) references padre(id) on update cascade on delete cascade);
+Query OK, 0 rows affected (0.20 sec)
+mysql-sql> insert into hijo(padre_id) values (1);
+ERROR: 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`evaluacion_2
+`.`hijo`, CONSTRAINT `hijo_ibfk_1` FOREIGN KEY (`padre_id`) REFERENCES `padre` (`id`) ON DELETE CASC
+ADE ON UPDATE CASCADE)
+mysql-sql> insert into padre(campo) values ("Algo");
+Query OK, 1 row affected (0.10 sec)
+mysql-sql> select * from padre;
++----+-------+
+| id | campo |
++----+-------+
+|  2 | Algo  |
++----+-------+
+1 row in set (0.00 sec)
+mysql-sql> insert into hijo (padre_id) values (2);
+Query OK, 1 row affected (0.13 sec)
+mysql-sql> delete from padre where id = 2;
+Query OK, 1 row affected (0.72 sec)
+mysql-sql> select * from padre;
+Empty set (0.00 sec)
+mysql-sql> select * from hijo;
+Empty set (0.00 sec)
+mysql-sql> insert into padre(campo) values ("nuevo");
+Query OK, 1 row affected (0.48 sec)
+mysql-sql> insert into hijo (padre_id) values (3);
+Query OK, 1 row affected (0.11 sec)
+mysql-sql> insert into hijo (padre_id) values (3);
+Query OK, 1 row affected (0.11 sec)
+mysql-sql> insert into hijo (padre_id) values (3);
+Query OK, 1 row affected (0.11 sec)
+mysql-sql> select * from hijo;
++----+----------+
+| id | padre_id |
++----+----------+
+|  3 |        3 |
+|  4 |        3 |
+|  5 |        3 |
++----+----------+
+3 rows in set (0.00 sec)
+mysql-sql> update padre set id = 11 where id = 3;
+Query OK, 1 row affected (0.13 sec)
+
+Rows matched: 1  Changed: 1  Warnings: 0
+mysql-sql> select * from padre;
++----+-------+
+| id | campo |
++----+-------+
+| 11 | nuevo |
++----+-------+
+1 row in set (0.00 sec)
+mysql-sql> select * from hijo;
++----+----------+
+| id | padre_id |
++----+----------+
+|  3 |       11 |
+|  4 |       11 |
+|  5 |       11 |
++----+----------+
+3 rows in set (0.00 sec)
+mysql-sql> desc padre;
++-------+-------------+------+-----+---------+----------------+
+| Field | Type        | Null | Key | Default | Extra          |
++-------+-------------+------+-----+---------+----------------+
+| id    | int(11)     | NO   | PRI | null    | auto_increment |
+| campo | varchar(50) | YES  |     | null    |                |
++-------+-------------+------+-----+---------+----------------+
+2 rows in set (0.02 sec)
+mysql-sql> create table hijo_2(
+       ... id int not null key auto_increment,
+       ... padre_id int not null);
+Query OK, 0 rows affected (0.50 sec)
+mysql-sql> alter table hijo_2 add foreign key (padre_id) references padre(id) on update cascade on d
+elete cascade;
+Query OK, 0 rows affected (0.33 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+mysql-sql> desc hijo_2;
++----------+---------+------+-----+---------+----------------+
+| Field    | Type    | Null | Key | Default | Extra          |
++----------+---------+------+-----+---------+----------------+
+| id       | int(11) | NO   | PRI | null    | auto_increment |
+| padre_id | int(11) | NO   | MUL | null    |                |
++----------+---------+------+-----+---------+----------------+
+2 rows in set (0.06 sec)
+mysql-sql> show create table hijo_2;
++--------+------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+--------------+
+| Table  | Create Table
+
+
+              |
++--------+------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+--------------+
+| hijo_2 | CREATE TABLE `hijo_2` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `padre_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `padre_id` (`padre_id`),
+  CONSTRAINT `hijo_2_ibfk_1` FOREIGN KEY (`padre_id`) REFERENCES `padre` (`id`) ON DELETE CASCADE ON
+ UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 |
++--------+------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+--------------+
+1 row in set (0.00 sec)
+mysql-sql>
+mysql-sql> alter table hijo_2 drop foreign key hijo_2_ibfk_1;
+Query OK, 0 rows affected (0.23 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+mysql-sql> show create table hijo_2;
++--------+------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------+
+| Table  | Create Table
+                                                                                                 |
++--------+------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------+
+| hijo_2 | CREATE TABLE `hijo_2` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `padre_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `padre_id` (`padre_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 |
++--------+------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+mysql-sql>
